@@ -26,6 +26,7 @@
 @property (strong, nonatomic) NSTimer *invalidateLayoutTimer;
 @property (strong, nonatomic) NSIndexPath *catchItemIndexPath;
 
+@property (strong, nonatomic) UIImageView *placeholderView;
 - (void)setUpGestureRecognizersOnCollectionView;
 
 @end

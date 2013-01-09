@@ -273,6 +273,12 @@ static NSString * const kLXReorderableCollectionViewFlowLayoutScrollingDirection
              completion:^(BOOL finished) {
                  [theHighlightedImageView removeFromSuperview];
                  
+                 if (self.placeholderView) {
+                     [self.collectionView insertSubview:self.placeholderView belowSubview:theView];
+                     self.placeholderView.center = theCollectionViewCell.center;
+                 }
+                 
+                 
                  if ([self.collectionView.delegate conformsToProtocol:@protocol(LXReorderableCollectionViewDelegateFlowLayout)]) {
                      id<LXReorderableCollectionViewDelegateFlowLayout> theDelegate = (id<LXReorderableCollectionViewDelegateFlowLayout>)self.collectionView.delegate;
                      if ([theDelegate respondsToSelector:@selector(collectionView:layout:didBeginReorderingAtIndexPath:)]) {
@@ -328,6 +334,9 @@ static NSString * const kLXReorderableCollectionViewFlowLayoutScrollingDirection
                  __strong LXReorderableCollectionViewFlowLayout *theStrongSelf = theWeakSelf;
                  
                  if (theIndexPathOfCatchItem) {
+                     if (self.placeholderView) {
+                         self.placeholderView.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
+                     }
                      theStrongSelf.currentView.transform = CGAffineTransformMakeScale(0.01f, 0.01f);
                      theStrongSelf.currentView.center = theLayoutAttributes.center;
                  } else {
@@ -337,6 +346,10 @@ static NSString * const kLXReorderableCollectionViewFlowLayoutScrollingDirection
              }
              completion:^(BOOL finished) {
                  __strong LXReorderableCollectionViewFlowLayout *theStrongSelf = theWeakSelf;
+                 
+                 if (self.placeholderView) {
+                     [self.placeholderView removeFromSuperview];
+                 }
                  
                  [theStrongSelf.currentView removeFromSuperview];
                  [theStrongSelf invalidateLayout];
