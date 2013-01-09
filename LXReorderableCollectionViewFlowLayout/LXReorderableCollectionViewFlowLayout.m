@@ -55,6 +55,8 @@ static NSString * const kLXReorderableCollectionViewFlowLayoutScrollingDirection
 
 - (void)awakeFromNib {
     [self setUpGestureRecognizersOnCollectionView];
+    self.dropEnabled = YES;
+    self.moveEnabled = YES;
 }
 
 #pragma mark - Custom methods
@@ -140,24 +142,33 @@ static NSString * const kLXReorderableCollectionViewFlowLayoutScrollingDirection
     NSIndexPath *theIndexPathOfSelectedItem = [self.collectionView indexPathForItemAtPoint:theCurrentViewCenter];
     
     UICollectionViewLayoutAttributes *theLayoutAttributesOfSelectedItem = [self layoutAttributesForItemAtIndexPath:theIndexPathOfSelectedItem];
-    CGRect theFrame = theLayoutAttributesOfSelectedItem.frame;
-    CGRect theLeftFrame;
-    CGRect theRightFrame;
-    CGRectDivide(theFrame, &theLeftFrame, &theRightFrame, CGRectGetWidth(theFrame) / 2.0f, CGRectMinXEdge);
     
-    if (CGRectContainsPoint(theLeftFrame, theCurrentViewCenter)) {
-        if (self.selectedItemIndexPath.item > theIndexPathOfSelectedItem.item) {
-            [self moveCurrentItemToIndexPath:theIndexPathOfSelectedItem];
-        } else {
-            [self dropCurrentItemOnIndexPath:theIndexPathOfSelectedItem];
+    if (self.moveEnabled && self.dropEnabled) {
+        CGRect theFrame = theLayoutAttributesOfSelectedItem.frame;
+        CGRect theLeftFrame;
+        CGRect theRightFrame;
+        CGRectDivide(theFrame, &theLeftFrame, &theRightFrame, CGRectGetWidth(theFrame) / 2.0f, CGRectMinXEdge);
+        
+        if (CGRectContainsPoint(theLeftFrame, theCurrentViewCenter)) {
+            if (self.selectedItemIndexPath.item > theIndexPathOfSelectedItem.item) {
+                [self moveCurrentItemToIndexPath:theIndexPathOfSelectedItem];
+            } else {
+                [self dropCurrentItemOnIndexPath:theIndexPathOfSelectedItem];
+            }
+        } else if (CGRectContainsPoint(theRightFrame, theCurrentViewCenter)) {
+            if (self.selectedItemIndexPath.item < theIndexPathOfSelectedItem.item) {
+                [self moveCurrentItemToIndexPath:theIndexPathOfSelectedItem];
+            } else {
+                [self dropCurrentItemOnIndexPath:theIndexPathOfSelectedItem];
+            }
         }
-    } else if (CGRectContainsPoint(theRightFrame, theCurrentViewCenter)) {
-        if (self.selectedItemIndexPath.item < theIndexPathOfSelectedItem.item) {
-            [self moveCurrentItemToIndexPath:theIndexPathOfSelectedItem];
-        } else {
-            [self dropCurrentItemOnIndexPath:theIndexPathOfSelectedItem];
-        }
+    } else if (self.dropEnabled) {
+        [self dropCurrentItemOnIndexPath:theIndexPathOfSelectedItem];
+    } else if (self.moveEnabled) {
+        [self moveCurrentItemToIndexPath:theIndexPathOfSelectedItem];
     }
+    
+  
 }
 
 #pragma mark - Target/Action methods

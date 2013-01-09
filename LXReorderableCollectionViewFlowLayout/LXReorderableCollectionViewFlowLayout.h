@@ -27,6 +27,10 @@
 @property (strong, nonatomic) NSIndexPath *catchItemIndexPath;
 
 @property (strong, nonatomic) UIImageView *placeholderView;
+
+@property (assign, nonatomic) BOOL moveEnabled;
+@property (assign, nonatomic) BOOL dropEnabled;
+
 - (void)setUpGestureRecognizersOnCollectionView;
 
 @end
