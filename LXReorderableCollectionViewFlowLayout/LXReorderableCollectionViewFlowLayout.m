@@ -393,7 +393,7 @@ static NSString * const kLXReorderableCollectionViewFlowLayoutScrollingDirection
                 [self.invalidateLayoutTimer invalidate];
                 self.invalidateLayoutTimer = nil;
             }
-            self.invalidateLayoutTimer = [NSTimer scheduledTimerWithTimeInterval:0.1f target:self selector:@selector(invalidateLayoutIfNecessary) userInfo:nil repeats:NO];
+            self.invalidateLayoutTimer = [NSTimer scheduledTimerWithTimeInterval:0.05f target:self selector:@selector(invalidateLayoutIfNecessary) userInfo:nil repeats:NO];
             
             switch (self.scrollDirection) {
                 case UICollectionViewScrollDirectionVertical: {
